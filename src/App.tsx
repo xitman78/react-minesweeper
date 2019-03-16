@@ -7,7 +7,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <Grid rows={6} cols={6} />
+        <Grid rows={5} cols={5} />
       </div>
     );
   }
