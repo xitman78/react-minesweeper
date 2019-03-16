@@ -37,6 +37,7 @@ const Grid: React.SFC<GridProps> = props => {
   function handleOnChange(row: number, col: number) {
     setState(prevState => {
       const rows = prevState.rows.slice();
+      rows[row] = rows[row].slice();
       rows[row][col] = !rows[row][col];
       const redColumns = prevState.redColumns.slice();
       redColumns[col] = isFourInColumn(rows, col);
