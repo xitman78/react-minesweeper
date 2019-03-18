@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState, useMemo } from "react";
 import Row from "./Row";
 import styled from "styled-components";
-import { isFourInColumn } from "./utils";
+import { isFourInColumn } from "../helpers/utils";
 
 const GridContainer = styled.div`
   margin-top: 20px;
@@ -17,12 +17,15 @@ const GridContainer = styled.div`
 
 const ClearButton = styled.button`
   margin-top: 20px;
-  padding: 10px 30px;
+  padding: 10px;
   border: none;
   background-color: #66cc66;
   font-size: 1.2em;
   color: white;
   cursor: pointer;
+  border-radius: 10px;
+  outline: none;
+  min-width: 100px;
   &:hover {
     background-color: #77dd77;
   }

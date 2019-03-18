@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import Cell from "./Cell";
-import { isFourInRow } from "./utils";
+import { isFourInRow } from "../helpers/utils";
 
 const RowWrapper = styled.div`
   display: flex;
