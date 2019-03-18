@@ -3,7 +3,10 @@ import styled from "styled-components";
 import Cell from "./Cell";
 import { isFourInRow } from "./utils";
 
-const RowWrapper = styled.div``;
+const RowWrapper = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+`;
 
 export interface RowProps {
   rowData: boolean[];

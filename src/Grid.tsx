@@ -4,9 +4,25 @@ import Row from "./Row";
 import styled from "styled-components";
 import { isFourInColumn } from "./utils";
 
+const GridContainer = styled.div`
+  margin-top: 20px;
+  border-radius: 30px;
+  padding: 20px;
+  text-align: center;
+  background-color: #ddd;
+`;
+
 const ClearButton = styled.button`
-  margin-top: 10px;
-  padding: 10px;
+  margin-top: 20px;
+  padding: 10px 30px;
+  border: none;
+  background-color: #66cc66;
+  font-size: 1.2em;
+  color: white;
+  cursor: pointer;
+  &:hover {
+    background-color: #77dd77;
+  }
 `;
 
 export interface GridProps {
@@ -49,7 +65,7 @@ const Grid: React.SFC<GridProps> = props => {
   }
 
   return (
-    <div>
+    <GridContainer>
       {state.rows.map((row, rowIndex) => (
         <Row
           key={rowIndex}
@@ -60,7 +76,7 @@ const Grid: React.SFC<GridProps> = props => {
         />
       ))}
       <ClearButton onClick={() => setState(initialState)}>Clear</ClearButton>
-    </div>
+    </GridContainer>
   );
 };
 
