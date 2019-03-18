@@ -10,6 +10,9 @@ const GridContainer = styled.div`
   padding: 20px;
   text-align: center;
   background-color: #ddd;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const ClearButton = styled.button`
@@ -49,6 +52,13 @@ const Grid: React.SFC<GridProps> = props => {
   ]);
 
   const [state, setState] = useState<GridState>(initialState);
+
+  if (
+    props.rows !== state.rows.length ||
+    props.cols !== state.redColumns.length
+  ) {
+    setState(getInitialState(props.rows, props.cols));
+  }
 
   function handleOnChange(row: number, col: number) {
     setState(prevState => {
