@@ -2,6 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 import Cell from "./Cell";
 import { isFourInRow } from "../helpers/utils";
+import { CellValue } from "./Grid";
 
 const RowWrapper = styled.div`
   display: flex;
@@ -9,19 +10,12 @@ const RowWrapper = styled.div`
 `;
 
 export interface RowProps {
-  rowData: boolean[];
-  redColumns: boolean[];
+  rowData: CellValue[];
   rowIndex: number;
   onChange: (row: number, col: number) => void;
 }
 
-const Row: React.SFC<RowProps> = ({
-  rowData,
-  rowIndex,
-  redColumns,
-  onChange
-}) => {
-  const isRedRow = isFourInRow(rowData);
+const Row: React.SFC<RowProps> = ({ rowData, rowIndex, onChange }) => {
   return (
     <RowWrapper>
       {rowData.map((cellValue, cellIndex) => (
@@ -29,8 +23,7 @@ const Row: React.SFC<RowProps> = ({
           key={cellIndex}
           rowIndex={rowIndex}
           colIndex={cellIndex}
-          isActive={cellValue}
-          isRed={redColumns[cellIndex] || isRedRow}
+          {...cellValue}
           onClick={() => onChange(rowIndex, cellIndex)}
         />
       ))}

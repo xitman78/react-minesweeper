@@ -2,7 +2,6 @@ import * as React from "react";
 import { useState, useMemo } from "react";
 import Row from "./Row";
 import styled from "styled-components";
-import { isFourInColumn } from "../helpers/utils";
 
 const GridContainer = styled.div`
   margin-top: 20px;
@@ -34,45 +33,73 @@ const ClearButton = styled.button`
 export interface GridProps {
   rows: number;
   cols: number;
+  mines: number;
+}
+
+export interface CellValue {
+  isMine: boolean;
+  isOpen: boolean;
+  neighbourMines: number;
 }
 
 export interface GridState {
-  rows: Array<Array<boolean>>;
-  redColumns: Array<boolean>;
+  rows: Array<Array<CellValue>>;
+  //redColumns: Array<boolean>;
 }
 
-function getInitialState(rows: number, cols: number): GridState {
+function getInitialState(
+  rows: number,
+  cols: number,
+  minesCount: number
+): GridState {
+  const minesArray = new Array(minesCount).fill(true);
+  const notMinesArray = new Array(rows * cols - minesCount).fill(false);
+
+  const combinedArray = minesArray
+    .concat(notMinesArray)
+    .sort(() => Math.random() - 0.5); // shuffle array
+
+  let seedCounter = 0;
+
   return {
-    rows: new Array(rows).fill([]).map(_ => new Array(cols).fill(false)),
-    redColumns: new Array(cols).fill(false)
+    rows: new Array<Array<CellValue>>(rows).fill([]).map(_ =>
+      new Array(cols)
+        .fill({
+          isMine: false,
+          isOpen: false,
+          neighbourMines: 0
+        })
+        .map(cell => ({
+          ...cell,
+          isMine: combinedArray[seedCounter++]
+        }))
+    )
+    // redColumns: new Array(cols).fill(false)
   };
 }
 
 const Grid: React.SFC<GridProps> = props => {
-  const initialState = useMemo(() => getInitialState(props.rows, props.cols), [
-    props.rows,
-    props.cols
-  ]);
+  const initialState = useMemo(
+    () => getInitialState(props.rows, props.cols, props.mines),
+    [props.rows, props.cols]
+  );
 
   const [state, setState] = useState<GridState>(initialState);
 
-  if (
-    props.rows !== state.rows.length ||
-    props.cols !== state.redColumns.length
-  ) {
-    setState(getInitialState(props.rows, props.cols));
+  if (props.rows !== state.rows.length) {
+    setState(getInitialState(props.rows, props.cols, props.mines));
   }
 
   function handleOnChange(row: number, col: number) {
     setState(prevState => {
       const rows = prevState.rows.slice();
       rows[row] = rows[row].slice();
-      rows[row][col] = !rows[row][col];
-      const redColumns = prevState.redColumns.slice();
-      redColumns[col] = isFourInColumn(rows, col);
+      rows[row][col] = {
+        ...rows[row][col],
+        isOpen: !rows[row][col].isOpen
+      };
       return {
-        rows,
-        redColumns
+        rows
       };
     });
   }
@@ -84,7 +111,6 @@ const Grid: React.SFC<GridProps> = props => {
           key={rowIndex}
           rowIndex={rowIndex}
           rowData={row}
-          redColumns={state.redColumns}
           onChange={handleOnChange}
         />
       ))}

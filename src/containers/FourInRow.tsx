@@ -29,6 +29,7 @@ const Label = styled.label`
 interface AppState {
   rows: number;
   cols: number;
+  mines: number;
 }
 
 export interface AppRouterProps {}
@@ -43,7 +44,8 @@ class FourInRowPage extends React.Component<{}, AppState> {
 
     this.state = {
       rows: 5,
-      cols: 5
+      cols: 5,
+      mines: 10
     };
   }
 
@@ -80,7 +82,7 @@ class FourInRowPage extends React.Component<{}, AppState> {
           />
         </InputsContainer>
         <MainContainer>
-          <Grid rows={this.state.rows} cols={this.state.cols} />
+          <Grid {...this.state} />
         </MainContainer>
       </div>
     );

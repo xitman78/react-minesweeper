@@ -1,11 +1,10 @@
 import * as React from "react";
 import styled from "styled-components";
+import { CellValue } from "./Grid";
 
-export interface CellProps {
+export interface CellProps extends CellValue {
   rowIndex: number;
   colIndex: number;
-  isActive: boolean;
-  isRed: boolean;
 }
 
 const Cell = styled("div")<CellProps>`
@@ -21,12 +20,12 @@ const Cell = styled("div")<CellProps>`
 
   margin: 3px;
   display: inline-block;
-  background-color: ${({ isRed, isActive }) =>
-    isRed ? "red" : isActive ? "orange" : "white"};
+  background-color: ${({ isMine, isOpen }) =>
+    isMine ? "red" : isOpen ? "orange" : "white"};
 
   &:hover {
-    background-color: ${({ isRed, isActive }) =>
-      isRed ? "#ff5353" : isActive ? "#ffb510" : "#efefef"};
+    background-color: ${({ isMine, isOpen }) =>
+      isMine ? "#ff5353" : isOpen ? "#ffb510" : "#efefef"};
   }
 
   transition: background-color 0.3s ease-out;
