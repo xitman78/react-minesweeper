@@ -44,7 +44,7 @@ export interface CellValue {
 
 export interface GridState {
   rows: Array<Array<CellValue>>;
-  //redColumns: Array<boolean>;
+  mines: number;
 }
 
 function getInitialState(
@@ -53,16 +53,20 @@ function getInitialState(
   minesCount: number
 ): GridState {
   const minesArray = new Array(minesCount).fill(true);
-  const notMinesArray = new Array(rows * cols - minesCount).fill(false);
+  const notMineCellsCount = rows * cols - minesCount;
+  const notMinesArray = new Array(
+    notMineCellsCount >= 0 ? notMineCellsCount : 0
+  ).fill(false);
 
-  const combinedArray = minesArray
+  const mineSeeder = minesArray
     .concat(notMinesArray)
-    .sort(() => Math.random() - 0.5); // shuffle array
+    .sort(() => Math.random() - 0.5); // shuffle seed array
 
   let seedCounter = 0;
 
   return {
-    rows: new Array<Array<CellValue>>(rows).fill([]).map(_ =>
+    mines: minesCount,
+    rows: new Array<Array<CellValue[]>>(rows).fill([]).map(_ =>
       new Array(cols)
         .fill({
           isMine: false,
@@ -71,22 +75,25 @@ function getInitialState(
         })
         .map(cell => ({
           ...cell,
-          isMine: combinedArray[seedCounter++]
+          isMine: mineSeeder[seedCounter++]
         }))
     )
-    // redColumns: new Array(cols).fill(false)
   };
 }
 
 const Grid: React.SFC<GridProps> = props => {
   const initialState = useMemo(
     () => getInitialState(props.rows, props.cols, props.mines),
-    [props.rows, props.cols]
+    [props.rows, props.cols, props.mines]
   );
 
   const [state, setState] = useState<GridState>(initialState);
 
-  if (props.rows !== state.rows.length) {
+  if (
+    props.rows !== state.rows.length ||
+    props.cols !== state.rows[0].length ||
+    state.mines !== props.mines
+  ) {
     setState(getInitialState(props.rows, props.cols, props.mines));
   }
 
@@ -99,7 +106,8 @@ const Grid: React.SFC<GridProps> = props => {
         isOpen: !rows[row][col].isOpen
       };
       return {
-        rows
+        rows,
+        mines: props.mines
       };
     });
   }
@@ -114,7 +122,13 @@ const Grid: React.SFC<GridProps> = props => {
           onChange={handleOnChange}
         />
       ))}
-      <ClearButton onClick={() => setState(initialState)}>Clear</ClearButton>
+      <ClearButton
+        onClick={() =>
+          setState(getInitialState(props.rows, props.cols, props.mines))
+        }
+      >
+        Clear
+      </ClearButton>
     </GridContainer>
   );
 };

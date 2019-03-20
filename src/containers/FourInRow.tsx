@@ -80,6 +80,14 @@ class FourInRowPage extends React.Component<{}, AppState> {
             value={this.state.cols}
             onChange={this.handleInputChange}
           />
+          <Label htmlFor="colsInput">Mines:</Label>
+          <Input
+            id="minesInput"
+            type="number"
+            name="mines"
+            value={this.state.mines}
+            onChange={this.handleInputChange}
+          />
         </InputsContainer>
         <MainContainer>
           <Grid {...this.state} />
