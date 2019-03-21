@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import Row from "./Row";
 import styled from "styled-components";
 
@@ -44,7 +44,6 @@ export interface CellValue {
 
 export interface GridState {
   rows: Array<Array<CellValue>>;
-  mines: number;
 }
 
 function getInitialState(
@@ -65,7 +64,6 @@ function getInitialState(
   let seedCounter = 0;
 
   return {
-    mines: minesCount,
     rows: new Array<Array<CellValue[]>>(rows).fill([]).map(_ =>
       new Array(cols)
         .fill({
@@ -89,13 +87,10 @@ const Grid: React.SFC<GridProps> = props => {
 
   const [state, setState] = useState<GridState>(initialState);
 
-  if (
-    props.rows !== state.rows.length ||
-    props.cols !== state.rows[0].length ||
-    state.mines !== props.mines
-  ) {
+  useMemo(() => {
+    console.log("use memo 2");
     setState(getInitialState(props.rows, props.cols, props.mines));
-  }
+  }, [props.rows, props.cols, props.mines]);
 
   function handleOnChange(row: number, col: number) {
     setState(prevState => {
@@ -111,6 +106,8 @@ const Grid: React.SFC<GridProps> = props => {
       };
     });
   }
+
+  console.log("render ---");
 
   return (
     <GridContainer>
