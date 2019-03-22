@@ -46,6 +46,37 @@ export interface GridState {
   rows: Array<Array<CellValue>>;
 }
 
+function getNeighbourCells(
+  rows: Array<CellValue[]>,
+  rowIndex: number,
+  cellIndex: number
+): Array<CellValue> {
+  const topNeighbours =
+    rowIndex === 0
+      ? []
+      : rows[rowIndex - 1].slice(
+          Math.max(cellIndex - 1, 0),
+          Math.max(cellIndex - 1, 0) + (cellIndex === 0 ? 2 : 3)
+        );
+
+  const leftCell = cellIndex <= 0 ? [] : [rows[rowIndex][cellIndex - 1]];
+
+  const rightCell =
+    cellIndex >= rows[0].length - 1 ? [] : [rows[rowIndex][cellIndex + 1]];
+
+  const bottomNeighbours =
+    rowIndex === rows.length - 1
+      ? []
+      : rows[rowIndex + 1].slice(
+          Math.max(cellIndex - 1, 0),
+          Math.max(cellIndex - 1, 0) + (cellIndex === 0 ? 2 : 3)
+        );
+
+  return topNeighbours
+    .concat(leftCell, rightCell, bottomNeighbours)
+    .filter(cell => !cell.isMine);
+}
+
 function getInitialState(
   rows: number,
   cols: number,
@@ -63,19 +94,32 @@ function getInitialState(
 
   let seedCounter = 0;
 
+  const allRows = new Array<Array<CellValue[]>>(rows).fill([]).map(_ =>
+    new Array(cols)
+      .fill({
+        isMine: false,
+        isOpen: false,
+        neighbourMines: 0
+      })
+      .map(cell => ({
+        ...cell,
+        isMine: mineSeeder[seedCounter++]
+      }))
+  );
+
+  for (let ri = 0; ri < rows; ri++) {
+    for (let ci = 0; ci < cols; ci++) {
+      if (allRows[ri][ci].isMine) {
+        const neighbourCells = getNeighbourCells(allRows, ri, ci);
+        neighbourCells.forEach(cell => {
+          cell.neighbourMines++;
+        });
+      }
+    }
+  }
+
   return {
-    rows: new Array<Array<CellValue[]>>(rows).fill([]).map(_ =>
-      new Array(cols)
-        .fill({
-          isMine: false,
-          isOpen: false,
-          neighbourMines: 0
-        })
-        .map(cell => ({
-          ...cell,
-          isMine: mineSeeder[seedCounter++]
-        }))
-    )
+    rows: allRows
   };
 }
 
@@ -88,7 +132,7 @@ const Grid: React.SFC<GridProps> = props => {
   const [state, setState] = useState<GridState>(initialState);
 
   useMemo(() => {
-    console.log("use memo 2");
+    // console.log("use memo 2");
     setState(getInitialState(props.rows, props.cols, props.mines));
   }, [props.rows, props.cols, props.mines]);
 

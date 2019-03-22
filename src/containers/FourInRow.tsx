@@ -43,8 +43,8 @@ class FourInRowPage extends React.Component<{}, AppState> {
     this.handleInputChange = this.handleInputChange.bind(this);
 
     this.state = {
-      rows: 5,
-      cols: 5,
+      rows: 10,
+      cols: 10,
       mines: 10
     };
   }

@@ -24,7 +24,7 @@ const Row: React.SFC<RowProps> = ({ rowData, rowIndex, onChange }) => {
           rowIndex={rowIndex}
           colIndex={cellIndex}
           {...cellValue}
-          onClick={() => onChange(rowIndex, cellIndex)}
+          onChange={onChange}
         />
       ))}
     </RowWrapper>
