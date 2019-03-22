@@ -39,6 +39,7 @@ export interface GridProps {
 export interface CellValue {
   isMine: boolean;
   isOpen: boolean;
+  isMarked: boolean;
   neighbourMines: number;
 }
 
@@ -99,6 +100,7 @@ function getInitialState(
       .fill({
         isMine: false,
         isOpen: false,
+        isMarked: false,
         neighbourMines: 0
       })
       .map(cell => ({
@@ -136,17 +138,45 @@ const Grid: React.SFC<GridProps> = props => {
     setState(getInitialState(props.rows, props.cols, props.mines));
   }, [props.rows, props.cols, props.mines]);
 
-  function handleOnChange(row: number, col: number) {
+  function handleOnChange(
+    row: number,
+    col: number,
+    action: "click" | "rightClick" = "click"
+  ) {
+    if (action === "click") {
+      if (state.rows[row][col].isOpen || state.rows[row][col].isMarked) {
+        return; // already open or marked
+      }
+    }
+    if (action === "rightClick") {
+      if (state.rows[row][col].isOpen) {
+        return; // already opened and cannot be marked
+      }
+    }
     setState(prevState => {
+      if (action === "click" && state.rows[row][col].isMine) {
+        // game over
+        return {
+          rows: state.rows.map(row =>
+            row.map(cell => ({ ...cell, isOpen: true }))
+          )
+        };
+      }
+
       const rows = prevState.rows.slice();
       rows[row] = rows[row].slice();
-      rows[row][col] = {
-        ...rows[row][col],
-        isOpen: !rows[row][col].isOpen
-      };
+      rows[row][col] =
+        action === "rightClick"
+          ? {
+              ...rows[row][col],
+              isMarked: !rows[row][col].isMarked
+            }
+          : {
+              ...rows[row][col],
+              isOpen: true
+            };
       return {
-        rows,
-        mines: props.mines
+        rows
       };
     });
   }
@@ -154,7 +184,12 @@ const Grid: React.SFC<GridProps> = props => {
   console.log("render ---");
 
   return (
-    <GridContainer>
+    <GridContainer
+      onContextMenu={event => {
+        event.preventDefault();
+        event.stopPropagation();
+      }}
+    >
       {state.rows.map((row, rowIndex) => (
         <Row
           key={rowIndex}

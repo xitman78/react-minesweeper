@@ -12,7 +12,7 @@ const RowWrapper = styled.div`
 export interface RowProps {
   rowData: CellValue[];
   rowIndex: number;
-  onChange: (row: number, col: number) => void;
+  onChange: (row: number, col: number, action?: "click" | "rightClick") => void;
 }
 
 const Row: React.SFC<RowProps> = ({ rowData, rowIndex, onChange }) => {

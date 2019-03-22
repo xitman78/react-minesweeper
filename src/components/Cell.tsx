@@ -5,16 +5,22 @@ import { CellValue } from "./Grid";
 export interface CellProps extends CellValue {
   rowIndex: number;
   colIndex: number;
-  onChange: (row: number, col: number) => void;
+  onChange: (row: number, col: number, action?: "click" | "rightClick") => void;
 }
+
+const CellContent = styled.div`
+  font-size: 1.8em;
+  user-select: none;
+`;
 
 const CellWrapper = styled("div")<{ isMine: boolean; isOpen: boolean }>`
   width: 60px;
   height: 60px;
   border-radius: 10px;
-  font-size: 2em;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+
+  justify-content: center;
 
   @media (max-width: 700px) {
     width: 40px;
@@ -23,7 +29,7 @@ const CellWrapper = styled("div")<{ isMine: boolean; isOpen: boolean }>`
   }
 
   margin: 3px;
-  display: inline-block;
+
   background-color: ${({ isOpen }) => (isOpen ? "orange" : "white")};
 
   &:hover {
@@ -37,11 +43,24 @@ const Cell: React.SFC<CellProps> = props => {
   return (
     <CellWrapper
       onClick={() => props.onChange(props.rowIndex, props.colIndex)}
+      onContextMenu={event => {
+        event.preventDefault();
+        event.stopPropagation();
+        props.onChange(props.rowIndex, props.colIndex, "rightClick");
+      }}
       isMine={props.isMine}
       isOpen={props.isOpen}
     >
-      {props.neighbourMines ? <div>{props.neighbourMines}</div> : null}
-      {props.isMine ? <div>💣</div> : null}
+      {props.isOpen ? (
+        <>
+          {props.neighbourMines ? (
+            <CellContent>{props.neighbourMines}</CellContent>
+          ) : null}
+          {props.isMine ? <CellContent>💣</CellContent> : null}
+        </>
+      ) : (
+        props.isMarked && <CellContent>⚑</CellContent>
+      )}
     </CellWrapper>
   );
 };
