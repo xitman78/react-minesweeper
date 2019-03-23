@@ -19,30 +19,14 @@ export interface AboutProps {
   decrement: () => void;
 }
 
-const About: React.SFC<AboutProps> = ({ counter, increment, decrement }) => {
+const About: React.SFC<AboutProps> = () => {
   return (
     <PageContainer>
       <AboutContainer>
         <h1>About Us</h1>
-        Counter: {counter}
-        <hr />
-        <button onClick={increment}>Increment</button>
-        <button onClick={decrement}>Decrement</button>
       </AboutContainer>
     </PageContainer>
   );
 };
 
-const mapStateToProps = (state: number) => ({
-  counter: state
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  increment: () => dispatch({ type: "INCREMENT" }),
-  decrement: () => dispatch({ type: "DECREMENT" })
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(About);
+export default About;

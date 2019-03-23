@@ -5,7 +5,7 @@ import { CellValue } from "./Grid";
 export interface CellProps extends CellValue {
   rowIndex: number;
   colIndex: number;
-  onChange: (row: number, col: number, action?: "click" | "rightClick") => void;
+  // onChange: (row: number, col: number, action?: "click" | "rightClick") => void;
 }
 
 const CellContent = styled.div`
@@ -42,10 +42,8 @@ const CellWrapper = styled("div")<{ isMine: boolean; isOpen: boolean }>`
 const Cell: React.SFC<CellProps> = props => {
   return (
     <CellWrapper
-      onClick={() => props.onChange(props.rowIndex, props.colIndex)}
-      onContextMenu={() =>
-        props.onChange(props.rowIndex, props.colIndex, "rightClick")
-      }
+      onClick={() => null}
+      onContextMenu={() => null}
       isMine={props.isMine}
       isOpen={props.isOpen}
     >
@@ -62,5 +60,8 @@ const Cell: React.SFC<CellProps> = props => {
     </CellWrapper>
   );
 };
+
+// props.onChange(props.rowIndex, props.colIndex)
+// props.onChange(props.rowIndex, props.colIndex, "rightClick"
 
 export default Cell;

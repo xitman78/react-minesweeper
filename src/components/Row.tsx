@@ -1,7 +1,8 @@
 import * as React from "react";
 import styled from "styled-components";
 import Cell from "./Cell";
-import { CellValue } from "./Grid";
+import { CellValue, GridState } from "./Grid";
+import { connect } from "react-redux";
 
 const RowWrapper = styled.div`
   display: flex;
@@ -11,10 +12,10 @@ const RowWrapper = styled.div`
 export interface RowProps {
   rowData: CellValue[];
   rowIndex: number;
-  onChange: (row: number, col: number, action?: "click" | "rightClick") => void;
+  // onChange: (row: number, col: number, action?: "click" | "rightClick") => void;
 }
 
-const Row: React.SFC<RowProps> = ({ rowData, rowIndex, onChange }) => {
+const Row: React.SFC<RowProps> = ({ rowData, rowIndex }) => {
   return (
     <RowWrapper>
       {rowData.map((cellValue, cellIndex) => (
@@ -23,11 +24,17 @@ const Row: React.SFC<RowProps> = ({ rowData, rowIndex, onChange }) => {
           rowIndex={rowIndex}
           colIndex={cellIndex}
           {...cellValue}
-          onChange={onChange}
         />
       ))}
     </RowWrapper>
   );
 };
 
-export default Row;
+const mapStateToProps = (state: GridState, ownProps: { rowIndex: number }) => ({
+  rowData: state.rows[ownProps.rowIndex]
+});
+
+export default connect(
+  mapStateToProps,
+  null
+)(Row);

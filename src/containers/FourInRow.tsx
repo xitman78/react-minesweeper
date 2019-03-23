@@ -1,6 +1,9 @@
 import * as React from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
 import Grid from "../components/Grid";
+import { Dispatch } from "redux";
+import { ResetGame } from "../store/store";
 
 const MainContainer = styled.div`
   display: flex;
@@ -32,12 +35,14 @@ interface AppState {
   mines: number;
 }
 
-export interface AppRouterProps {}
+export interface AppRouterProps {
+  resetGame: (rows: number, cols: number, mines: number) => void;
+}
 
 export interface AppRouterState {}
 
-class FourInRowPage extends React.Component<{}, AppState> {
-  constructor(props: {}) {
+class FourInRowPage extends React.Component<AppRouterProps, AppState> {
+  constructor(props: AppRouterProps) {
     super(props);
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -54,10 +59,19 @@ class FourInRowPage extends React.Component<{}, AppState> {
     if (isNaN(num) || num <= 0) {
       num = 1;
     }
-    // @ts-ignore
-    this.setState({
-      [event.target.name]: num
-    });
+    this.setState(
+      // @ts-ignore
+      {
+        [event.target.name]: num
+      },
+      () => {
+        this.props.resetGame(
+          this.state.rows,
+          this.state.cols,
+          this.state.mines
+        );
+      }
+    );
   }
 
   render() {
@@ -90,11 +104,19 @@ class FourInRowPage extends React.Component<{}, AppState> {
           />
         </InputsContainer>
         <MainContainer>
-          <Grid {...this.state} />
+          <Grid />
         </MainContainer>
       </div>
     );
   }
 }
 
-export default FourInRowPage;
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  resetGame: (rows: number, cols: number, mines: number) =>
+    dispatch<ResetGame>({ type: "reset", rows, columns: cols, mines })
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(FourInRowPage);
