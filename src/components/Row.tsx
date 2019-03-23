@@ -1,8 +1,8 @@
 import * as React from "react";
 import styled from "styled-components";
-import Cell from "./Cell";
-import { CellValue, GridState } from "./Grid";
 import { connect } from "react-redux";
+import Cell from "./Cell";
+import { CellValue, GridState } from "../store/types";
 
 const RowWrapper = styled.div`
   display: flex;
@@ -12,19 +12,14 @@ const RowWrapper = styled.div`
 export interface RowProps {
   rowData: CellValue[];
   rowIndex: number;
-  // onChange: (row: number, col: number, action?: "click" | "rightClick") => void;
 }
 
 const Row: React.SFC<RowProps> = ({ rowData, rowIndex }) => {
+  console.log("---- row render");
   return (
     <RowWrapper>
       {rowData.map((cellValue, cellIndex) => (
-        <Cell
-          key={cellIndex}
-          rowIndex={rowIndex}
-          colIndex={cellIndex}
-          {...cellValue}
-        />
+        <Cell key={cellIndex} rowIndex={rowIndex} colIndex={cellIndex} />
       ))}
     </RowWrapper>
   );

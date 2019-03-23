@@ -1,4 +1,4 @@
-import { GridState, CellValue } from "../components/Grid";
+import { GridState, CellValue } from "../store/types";
 import { getNeighbourCells } from "./getNeighbourCells";
 
 export function getInitialState(

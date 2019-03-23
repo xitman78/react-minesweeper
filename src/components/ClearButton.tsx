@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { GridState } from "./Grid";
+import { GridState } from "../store/types";
 import { newGame } from "../store/action";
 
 const ClearButtonContainer = styled.button`
@@ -28,7 +28,7 @@ export interface ClearButtonProps {
 const ClearButton: React.SFC<ClearButtonProps> = ({ gameState, newGame }) => {
   return (
     <ClearButtonContainer onClick={newGame}>
-      {gameState === "game" || (gameState === "new" && "New")}
+      {(gameState === "game" || gameState === "new") && "New"}
       {gameState === "win" && "😃"}
       {gameState === "over" && "😵"}
     </ClearButtonContainer>

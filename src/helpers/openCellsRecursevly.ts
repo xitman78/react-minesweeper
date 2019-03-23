@@ -1,4 +1,4 @@
-import { CellValue } from "../components/Grid";
+import { CellValue } from "../store/types";
 import { getNeighbourCells } from "./getNeighbourCells";
 
 interface OpenCellsRecursevlyResponse {

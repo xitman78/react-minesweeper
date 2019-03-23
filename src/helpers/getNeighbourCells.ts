@@ -1,4 +1,4 @@
-import { CellValue } from "../components/Grid";
+import { CellValue } from "../store/types";
 
 interface GetNeighbourCellsResposeItem {
   cell: CellValue;
