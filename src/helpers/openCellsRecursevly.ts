@@ -17,7 +17,10 @@ export function openCellsRecursevly(
     };
   }
   allRows[rowIndex] = allRows[rowIndex].slice(); // copy row
-  allRows[rowIndex][cellIndex].isOpen = true;
+  allRows[rowIndex][cellIndex] = {
+    ...allRows[rowIndex][cellIndex],
+    isOpen: true
+  };
   if (allRows[rowIndex][cellIndex].neighbourMines > 0) {
     // there are neighbour mines - open only one cell
     return {

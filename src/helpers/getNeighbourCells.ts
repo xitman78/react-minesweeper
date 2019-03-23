@@ -59,5 +59,5 @@ export function getNeighbourCells(
 
   return topNeighbours
     .concat(leftCell, rightCell, bottomNeighbours)
-    .filter(cell => !cell.cell.isMine);
+    .filter(cell => !cell.cell.isMine && !cell.cell.isMarked);
 }

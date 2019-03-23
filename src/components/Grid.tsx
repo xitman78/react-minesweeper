@@ -18,7 +18,7 @@ const GridContainer = styled.div`
 `;
 
 export interface GridProps {
-  rows: Array<CellValue[]>;
+  rowsCount: number;
 }
 
 const Grid: React.SFC<GridProps> = props => {
@@ -32,7 +32,7 @@ const Grid: React.SFC<GridProps> = props => {
       }}
     >
       <Timer />
-      {props.rows.map((row, rowIndex) => (
+      {new Array(props.rowsCount).fill(0).map((_, rowIndex) => (
         <Row key={rowIndex} rowIndex={rowIndex} />
       ))}
       <ClearButton />
@@ -41,7 +41,7 @@ const Grid: React.SFC<GridProps> = props => {
 };
 
 const mapStateToProps = (state: GridState) => ({
-  rows: state.rows
+  rowsCount: state.rows.length
 });
 
 export default connect(

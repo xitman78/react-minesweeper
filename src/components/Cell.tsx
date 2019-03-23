@@ -68,9 +68,9 @@ const Cell: React.SFC<CellProps> = props => {
 const mapStateToProps = (
   state: GridState,
   ownProps: { rowIndex: number; colIndex: number }
-) => ({
-  ...state.rows[ownProps.rowIndex][ownProps.colIndex]
-});
+) => {
+  return state.rows[ownProps.rowIndex][ownProps.colIndex];
+};
 
 export default connect(
   mapStateToProps,

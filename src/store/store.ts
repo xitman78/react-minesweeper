@@ -71,7 +71,7 @@ function game(state: GridState | undefined, action: ActitionType): GridState {
       ) {
         // user clicked on free cell - open free cells recursevly
         const { opened } = openCellsRecursevly(
-          state.rows,
+          rows,
           action.rowIndex,
           action.cellIndex
         );

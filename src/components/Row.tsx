@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import Cell from "./Cell";
-import { CellValue, GridState } from "../store/types";
+import { GridState } from "../store/types";
 
 const RowWrapper = styled.div`
   display: flex;
@@ -10,23 +10,25 @@ const RowWrapper = styled.div`
 `;
 
 export interface RowProps {
-  rowData: CellValue[];
+  rowLength: number;
   rowIndex: number;
 }
 
-const Row: React.SFC<RowProps> = ({ rowData, rowIndex }) => {
+const Row: React.SFC<RowProps> = ({ rowLength, rowIndex }) => {
   console.log("---- row render");
+  const cells: number[] = new Array(rowLength).fill(1).map((_, i) => i);
   return (
     <RowWrapper>
-      {rowData.map((cellValue, cellIndex) => (
+      {cells.map(cellIndex => (
+        // @ts-ignore
         <Cell key={cellIndex} rowIndex={rowIndex} colIndex={cellIndex} />
       ))}
     </RowWrapper>
   );
 };
 
-const mapStateToProps = (state: GridState, ownProps: { rowIndex: number }) => ({
-  rowData: state.rows[ownProps.rowIndex]
+const mapStateToProps = (state: GridState) => ({
+  rowLength: state.rows[0].length
 });
 
 export default connect(
