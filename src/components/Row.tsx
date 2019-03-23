@@ -1,7 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
 import Cell from "./Cell";
-import { isFourInRow } from "../helpers/utils";
 import { CellValue } from "./Grid";
 
 const RowWrapper = styled.div`

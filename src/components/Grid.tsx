@@ -1,7 +1,9 @@
 import * as React from "react";
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo } from "react";
 import Row from "./Row";
 import styled from "styled-components";
+import { openCellsRecursevly } from "../helpers/openCellsRecursevly";
+import { getNeighbourCells } from "../helpers/getNeighbourCells";
 
 const GridContainer = styled.div`
   margin-top: 20px;
@@ -50,37 +52,6 @@ export interface GridState {
   gameState: "new" | "game" | "win" | "over";
 }
 
-function getNeighbourCells(
-  rows: Array<CellValue[]>,
-  rowIndex: number,
-  cellIndex: number
-): Array<CellValue> {
-  const topNeighbours =
-    rowIndex === 0
-      ? []
-      : rows[rowIndex - 1].slice(
-          Math.max(cellIndex - 1, 0),
-          Math.max(cellIndex - 1, 0) + (cellIndex === 0 ? 2 : 3)
-        );
-
-  const leftCell = cellIndex <= 0 ? [] : [rows[rowIndex][cellIndex - 1]];
-
-  const rightCell =
-    cellIndex >= rows[0].length - 1 ? [] : [rows[rowIndex][cellIndex + 1]];
-
-  const bottomNeighbours =
-    rowIndex === rows.length - 1
-      ? []
-      : rows[rowIndex + 1].slice(
-          Math.max(cellIndex - 1, 0),
-          Math.max(cellIndex - 1, 0) + (cellIndex === 0 ? 2 : 3)
-        );
-
-  return topNeighbours
-    .concat(leftCell, rightCell, bottomNeighbours)
-    .filter(cell => !cell.isMine);
-}
-
 function getInitialState(
   rows: number,
   cols: number,
@@ -117,7 +88,7 @@ function getInitialState(
       if (allRows[ri][ci].isMine) {
         const neighbourCells = getNeighbourCells(allRows, ri, ci);
         neighbourCells.forEach(cell => {
-          cell.neighbourMines++;
+          cell.cell.neighbourMines++;
         });
       }
     }
@@ -175,11 +146,30 @@ const Grid: React.SFC<GridProps> = props => {
         };
       }
 
-      const rows = prevState.rows.slice();
-      rows[row] = rows[row].slice();
       let cellsOpened = prevState.cellsOpened;
       let minesMarked = prevState.minesMarked;
       let gameState = prevState.gameState;
+
+      const rows = prevState.rows.slice(); // copy main array
+
+      if (
+        action === "click" &&
+        !rows[row][col].isOpen &&
+        rows[row][col].neighbourMines === 0
+      ) {
+        // user clicked on free cell - open free cells recursevly
+        const { opened } = openCellsRecursevly(prevState.rows, row, col);
+        console.log("opened", opened);
+        return {
+          rows,
+          minesMarked,
+          cellsOpened: cellsOpened + opened,
+          gameState
+        };
+      }
+
+      rows[row] = rows[row].slice();
+
       if (action === "rightClick") {
         minesMarked =
           prevState.minesMarked + (rows[row][col].isMarked ? -1 : 1);
@@ -201,8 +191,6 @@ const Grid: React.SFC<GridProps> = props => {
         gameState = "win";
       }
 
-      // console.log("minesMarked", minesMarked);
-      // console.log("cellsOpened", cellsOpened);
       return {
         rows,
         minesMarked,
