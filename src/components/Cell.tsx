@@ -43,11 +43,9 @@ const Cell: React.SFC<CellProps> = props => {
   return (
     <CellWrapper
       onClick={() => props.onChange(props.rowIndex, props.colIndex)}
-      onContextMenu={event => {
-        event.preventDefault();
-        event.stopPropagation();
-        props.onChange(props.rowIndex, props.colIndex, "rightClick");
-      }}
+      onContextMenu={() =>
+        props.onChange(props.rowIndex, props.colIndex, "rightClick")
+      }
       isMine={props.isMine}
       isOpen={props.isOpen}
     >

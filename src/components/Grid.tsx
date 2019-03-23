@@ -45,6 +45,9 @@ export interface CellValue {
 
 export interface GridState {
   rows: Array<Array<CellValue>>;
+  minesMarked: number;
+  cellsOpened: number;
+  gameState: "new" | "game" | "win" | "over";
 }
 
 function getNeighbourCells(
@@ -121,7 +124,10 @@ function getInitialState(
   }
 
   return {
-    rows: allRows
+    rows: allRows,
+    minesMarked: 0,
+    cellsOpened: 0,
+    gameState: "new"
   };
 }
 
@@ -143,6 +149,9 @@ const Grid: React.SFC<GridProps> = props => {
     col: number,
     action: "click" | "rightClick" = "click"
   ) {
+    if (state.gameState !== "game" && state.gameState !== "new") {
+      return;
+    }
     if (action === "click") {
       if (state.rows[row][col].isOpen || state.rows[row][col].isMarked) {
         return; // already open or marked
@@ -159,24 +168,46 @@ const Grid: React.SFC<GridProps> = props => {
         return {
           rows: state.rows.map(row =>
             row.map(cell => ({ ...cell, isOpen: true }))
-          )
+          ),
+          minesMarked: 0,
+          cellsOpened: props.cols * props.rows,
+          gameState: "over"
         };
       }
 
       const rows = prevState.rows.slice();
       rows[row] = rows[row].slice();
-      rows[row][col] =
-        action === "rightClick"
-          ? {
-              ...rows[row][col],
-              isMarked: !rows[row][col].isMarked
-            }
-          : {
-              ...rows[row][col],
-              isOpen: true
-            };
+      let cellsOpened = prevState.cellsOpened;
+      let minesMarked = prevState.minesMarked;
+      let gameState = prevState.gameState;
+      if (action === "rightClick") {
+        minesMarked =
+          prevState.minesMarked + (rows[row][col].isMarked ? -1 : 1);
+        rows[row][col] = {
+          ...rows[row][col],
+          isMarked: !rows[row][col].isMarked
+        };
+      } else {
+        cellsOpened++;
+        rows[row][col] = {
+          ...rows[row][col],
+          isOpen: true
+        };
+      }
+
+      if (cellsOpened + minesMarked === props.cols * props.cols) {
+        // victory
+        console.log("!!!!!!!!!!!!!victoria!!!!!!!!!!!!!!!!!!");
+        gameState = "win";
+      }
+
+      // console.log("minesMarked", minesMarked);
+      // console.log("cellsOpened", cellsOpened);
       return {
-        rows
+        rows,
+        minesMarked,
+        cellsOpened,
+        gameState
       };
     });
   }
@@ -203,7 +234,9 @@ const Grid: React.SFC<GridProps> = props => {
           setState(getInitialState(props.rows, props.cols, props.mines))
         }
       >
-        Clear
+        {state.gameState === "game" || (state.gameState === "new" && "New")}
+        {state.gameState === "win" && "😃"}
+        {state.gameState === "over" && "😵"}
       </ClearButton>
     </GridContainer>
   );
