@@ -1,6 +1,6 @@
 {
-  "name": "itera-tst",
-  "version": "0.1.0",
+  "name": "react-minesweeper",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@types/react": "^16.8.8",
