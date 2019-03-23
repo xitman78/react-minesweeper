@@ -2,7 +2,6 @@ import { CellValue } from "../components/Grid";
 import { getNeighbourCells } from "./getNeighbourCells";
 
 interface OpenCellsRecursevlyResponse {
-  rows: Array<CellValue[]>;
   opened: number;
 }
 
@@ -14,7 +13,6 @@ export function openCellsRecursevly(
   if (allRows[rowIndex][cellIndex].isOpen) {
     // already opened
     return {
-      rows: allRows,
       opened: 0
     };
   }
@@ -23,7 +21,6 @@ export function openCellsRecursevly(
   if (allRows[rowIndex][cellIndex].neighbourMines > 0) {
     // there are neighbour mines - open only one cell
     return {
-      rows: allRows,
       opened: 1
     };
   }
@@ -42,7 +39,6 @@ export function openCellsRecursevly(
   }
 
   return {
-    rows: allRows,
     opened: cellsOpened
   };
 }

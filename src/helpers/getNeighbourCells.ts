@@ -11,22 +11,21 @@ export function getNeighbourCells(
   rowIndex: number,
   cellIndex: number
 ): Array<GetNeighbourCellsResposeItem> {
+  const startCellIndex = Math.max(cellIndex - 1, 0);
+  const endCellIndex = startCellIndex + (cellIndex === 0 ? 2 : 3);
   const topNeighbours: GetNeighbourCellsResposeItem[] =
     rowIndex === 0
       ? []
       : rows[rowIndex - 1]
-          .slice(
-            Math.max(cellIndex - 1, 0),
-            Math.max(cellIndex - 1, 0) + (cellIndex === 0 ? 2 : 3)
-          )
+          .slice(startCellIndex, endCellIndex)
           .map((cell, i) => ({
             cell,
             rowIndex: rowIndex - 1,
-            cellIndex: Math.max(cellIndex - 1, 0) + i
+            cellIndex: startCellIndex + i
           }));
 
   const leftCell: GetNeighbourCellsResposeItem[] =
-    cellIndex <= 0
+    cellIndex === 0
       ? []
       : [
           {
@@ -37,7 +36,7 @@ export function getNeighbourCells(
         ];
 
   const rightCell: GetNeighbourCellsResposeItem[] =
-    cellIndex >= rows[0].length - 1
+    cellIndex === rows[0].length - 1
       ? []
       : [
           {
@@ -51,14 +50,11 @@ export function getNeighbourCells(
     rowIndex === rows.length - 1
       ? []
       : rows[rowIndex + 1]
-          .slice(
-            Math.max(cellIndex - 1, 0),
-            Math.max(cellIndex - 1, 0) + (cellIndex === 0 ? 2 : 3)
-          )
+          .slice(startCellIndex, endCellIndex)
           .map((cell, i) => ({
             cell,
             rowIndex: rowIndex + 1,
-            cellIndex: Math.max(cellIndex - 1, 0) + i
+            cellIndex: startCellIndex + i
           }));
 
   return topNeighbours
