@@ -14,7 +14,7 @@ export interface TimerState {
 }
 
 class Timer extends React.Component<TimerProps, TimerState> {
-  interval: any = null;
+  interval: number | null = null;
 
   constructor(props: TimerProps) {
     super(props);
@@ -60,7 +60,11 @@ class Timer extends React.Component<TimerProps, TimerState> {
   componentDidUpdate(prevProps: TimerProps, prevState: TimerState) {
     if (!prevState.isTimerStarted && this.state.isTimerStarted) {
       this.interval = setInterval(this.handleInterval, 100);
-    } else if (prevState.isTimerStarted && !this.state.isTimerStarted) {
+    } else if (
+      prevState.isTimerStarted &&
+      !this.state.isTimerStarted &&
+      this.interval
+    ) {
       clearInterval(this.interval);
       this.interval = null;
     }

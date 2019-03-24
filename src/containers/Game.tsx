@@ -2,8 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import Grid from "../components/Grid";
-import { Dispatch } from "redux";
-import { ResetGame } from "../store/store";
+import { resetGame } from "../store/action";
 
 const MainContainer = styled.div`
   display: flex;
@@ -36,12 +35,12 @@ interface AppState {
 }
 
 export interface AppRouterProps {
-  resetGame: (rows: number, cols: number, mines: number) => void;
+  resetGame: typeof resetGame;
 }
 
 export interface AppRouterState {}
 
-class FourInRowPage extends React.Component<AppRouterProps, AppState> {
+class Game extends React.Component<AppRouterProps, AppState> {
   constructor(props: AppRouterProps) {
     super(props);
 
@@ -111,12 +110,9 @@ class FourInRowPage extends React.Component<AppRouterProps, AppState> {
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  resetGame: (rows: number, cols: number, mines: number) =>
-    dispatch<ResetGame>({ type: "reset", rows, columns: cols, mines })
-});
-
 export default connect(
   null,
-  mapDispatchToProps
-)(FourInRowPage);
+  {
+    resetGame
+  }
+)(Game);

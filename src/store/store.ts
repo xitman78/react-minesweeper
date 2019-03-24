@@ -75,7 +75,7 @@ function game(state: GridState | undefined, action: ActitionType): GridState {
           action.rowIndex,
           action.cellIndex
         );
-        console.log("opened", opened);
+        
         return {
           rows,
           minesMarked,

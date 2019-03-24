@@ -43,7 +43,6 @@ const CellWrapper = styled("div")<{ isMine: boolean; isOpen: boolean }>`
 `;
 
 const Cell: React.SFC<CellProps> = props => {
-  console.log("cell render");
   return (
     <CellWrapper
       onClick={() => props.cellClick(props.rowIndex, props.colIndex)}

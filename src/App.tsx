@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import { Route, Switch, Link } from "react-router-dom";
-import FourInRowPage from "./containers/FourInRow";
+import Game from "./containers/Game";
 import About from "./containers/About";
 
 const Menu = styled.div`
@@ -25,7 +25,7 @@ class App extends React.Component<AppRouterProps> {
           <Nav to="/about">About</Nav>
         </Menu>
         <Switch>
-          <Route exact path="/" component={FourInRowPage} />
+          <Route exact path="/" component={Game} />
           <Route exact path="/about" component={About} />
         </Switch>
       </div>

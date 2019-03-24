@@ -15,12 +15,10 @@ export interface RowProps {
 }
 
 const Row: React.SFC<RowProps> = ({ rowLength, rowIndex }) => {
-  console.log("---- row render");
   const cells: number[] = new Array(rowLength).fill(1).map((_, i) => i);
   return (
     <RowWrapper>
       {cells.map(cellIndex => (
-        // @ts-ignore
         <Cell key={cellIndex} rowIndex={rowIndex} colIndex={cellIndex} />
       ))}
     </RowWrapper>

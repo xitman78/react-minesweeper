@@ -22,8 +22,6 @@ export interface GridProps {
 }
 
 const Grid: React.SFC<GridProps> = props => {
-  console.log("render ---");
-
   return (
     <GridContainer
       onContextMenu={event => {
