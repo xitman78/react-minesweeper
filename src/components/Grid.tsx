@@ -3,7 +3,7 @@ import Row from "./Row";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import ClearButton from "./ClearButton";
-import { CellValue, GridState } from "../store/types";
+import { GridState } from "../store/types";
 import Timer from "./Timer";
 
 const GridContainer = styled.div`

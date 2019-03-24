@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { GridState } from "../store/types";
+import {GameState, GridState} from "../store/types";
 import { newGame } from "../store/action";
 
 const ClearButtonContainer = styled.button`
@@ -21,7 +21,7 @@ const ClearButtonContainer = styled.button`
 `;
 
 export interface ClearButtonProps {
-  gameState: "new" | "game" | "win" | "over";
+  gameState: GameState;
   newGame: typeof newGame;
 }
 

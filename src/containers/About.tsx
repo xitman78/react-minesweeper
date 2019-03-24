@@ -1,7 +1,5 @@
 import * as React from "react";
 import styled from "styled-components";
-import { connect } from "react-redux";
-import { Dispatch } from "redux";
 
 const PageContainer = styled.div`
   display: flex;

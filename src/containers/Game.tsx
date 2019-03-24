@@ -34,14 +34,12 @@ interface AppState {
   mines: number;
 }
 
-export interface AppRouterProps {
+export interface GameProps {
   resetGame: typeof resetGame;
 }
 
-export interface AppRouterState {}
-
-class Game extends React.Component<AppRouterProps, AppState> {
-  constructor(props: AppRouterProps) {
+class Game extends React.Component<GameProps, AppState> {
+  constructor(props: GameProps) {
     super(props);
 
     this.handleInputChange = this.handleInputChange.bind(this);

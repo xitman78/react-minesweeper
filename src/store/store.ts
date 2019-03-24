@@ -1,7 +1,7 @@
 import { createStore } from "redux";
 import { getInitialState } from "../helpers/getInitialState";
 import { GridState, GameState } from "./types";
-import { openCellsRecursevly } from "../helpers/openCellsRecursevly";
+import { openCellsRecursively } from "../helpers/openCellsRecursevly";
 
 export interface ClickAction {
   type: "click";
@@ -26,9 +26,9 @@ export interface NewGame {
   type: "newGame";
 }
 
-type ActitionType = ClickAction | RightClickAction | ResetGame | NewGame;
+type ActionType = ClickAction | RightClickAction | ResetGame | NewGame;
 
-function game(state: GridState | undefined, action: ActitionType): GridState {
+function game(state: GridState | undefined, action: ActionType): GridState {
   if (!state) {
     return getInitialState(10, 10, 10);
   }
@@ -70,7 +70,7 @@ function game(state: GridState | undefined, action: ActitionType): GridState {
         rows[action.rowIndex][action.cellIndex].neighbourMines === 0
       ) {
         // user clicked on free cell - open free cells recursevly
-        const { opened } = openCellsRecursevly(
+        const { opened } = openCellsRecursively(
           rows,
           action.rowIndex,
           action.cellIndex

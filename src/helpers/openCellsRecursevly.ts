@@ -1,15 +1,15 @@
 import { CellValue } from "../store/types";
 import { getNeighbourCells } from "./getNeighbourCells";
 
-interface OpenCellsRecursevlyResponse {
+interface OpenCellsRecursivelyResponse {
   opened: number;
 }
 
-export function openCellsRecursevly(
+export function openCellsRecursively(
   allRows: Array<CellValue[]>,
   rowIndex: number,
   cellIndex: number
-): OpenCellsRecursevlyResponse {
+): OpenCellsRecursivelyResponse {
   if (allRows[rowIndex][cellIndex].isOpen) {
     // already opened
     return {
@@ -27,7 +27,7 @@ export function openCellsRecursevly(
       opened: 1
     };
   }
-  // else get all neighbour cells and call this function recursevly
+  // else get all neighbour cells and call this function recursively
   let cellsOpened = 1;
 
   const neighbourCells = getNeighbourCells(allRows, rowIndex, cellIndex).filter(
@@ -35,7 +35,7 @@ export function openCellsRecursevly(
   );
 
   for (let cell of neighbourCells) {
-    const { opened } = openCellsRecursevly(
+    const { opened } = openCellsRecursively(
       allRows,
       cell.rowIndex,
       cell.cellIndex
