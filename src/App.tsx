@@ -21,7 +21,7 @@ class App extends React.Component<AppRouterProps> {
     return (
       <div>
         <Menu>
-          <Nav to="/">Home</Nav>
+          <Nav to="/">Game</Nav>
           <Nav to="/about">About</Nav>
         </Menu>
         <Switch>
