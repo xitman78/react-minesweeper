@@ -30,9 +30,11 @@ export function openCellsRecursevly(
   // else get all neighbour cells and call this function recursevly
   let cellsOpened = 1;
 
-  const heighbourCells = getNeighbourCells(allRows, rowIndex, cellIndex);
+  const neighbourCells = getNeighbourCells(allRows, rowIndex, cellIndex).filter(
+    cell => !cell.cell.isMine && !cell.cell.isMarked
+  );
 
-  for (let cell of heighbourCells) {
+  for (let cell of neighbourCells) {
     const { opened } = openCellsRecursevly(
       allRows,
       cell.rowIndex,

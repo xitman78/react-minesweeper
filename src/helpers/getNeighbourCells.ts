@@ -57,7 +57,5 @@ export function getNeighbourCells(
             cellIndex: startCellIndex + i
           }));
 
-  return topNeighbours
-    .concat(leftCell, rightCell, bottomNeighbours)
-    .filter(cell => !cell.cell.isMine && !cell.cell.isMarked);
+  return topNeighbours.concat(leftCell, rightCell, bottomNeighbours);
 }
