@@ -52,6 +52,9 @@ const Grid: React.SFC<GridProps> = props => {
     <GridContainer
       onClick={event => clickHandler(event, props.cellClick)}
       onContextMenu={event => clickHandler(event, props.cellRightClick)}
+      onDoubleClick={event => {
+        console.log("onDoubleClick");
+      }}
     >
       <Timer />
       {new Array(props.rowsCount).fill(0).map((_, rowIndex) => (

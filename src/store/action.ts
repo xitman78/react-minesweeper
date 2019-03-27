@@ -1,5 +1,4 @@
-import { NewGame, ResetGame, ClickAction, RightClickAction } from "./store";
-import { number } from "prop-types";
+import { NewGame, ResetGame, ClickAction, RightClickAction } from "./reducer";
 
 export function newGame(): NewGame {
   return {
