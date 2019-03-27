@@ -1,31 +1,22 @@
 import { getInitialState } from "../helpers/getInitialState";
 import { GridState, GameState } from "./types";
 import { openCellsRecursively } from "../helpers/openCellsRecursevly";
+import {
+  ClickAction,
+  DoubleClickAction,
+  RightClickAction,
+  ResetGame,
+  NewGame
+} from "./actionTypes";
+// import { getNeighbourCells } from "../helpers/getNeighbourCells";
+import { handleDoubleClickRecursively } from "../helpers/handleDoubleClickRecursevly";
 
-export interface ClickAction {
-  type: "click";
-  rowIndex: number;
-  cellIndex: number;
-}
-
-export interface RightClickAction {
-  type: "rightClick";
-  rowIndex: number;
-  cellIndex: number;
-}
-
-export interface ResetGame {
-  type: "reset";
-  rows: number;
-  columns: number;
-  mines: number;
-}
-
-export interface NewGame {
-  type: "newGame";
-}
-
-type ActionType = ClickAction | RightClickAction | ResetGame | NewGame;
+type ActionType =
+  | ClickAction
+  | DoubleClickAction
+  | RightClickAction
+  | ResetGame
+  | NewGame;
 
 export function game(
   state: GridState | undefined,
@@ -41,14 +32,13 @@ export function game(
         return state;
       }
 
-      if (
-        state.rows[action.rowIndex][action.cellIndex].isOpen ||
-        state.rows[action.rowIndex][action.cellIndex].isMarked
-      ) {
+      const cell = state.rows[action.rowIndex][action.cellIndex];
+
+      if (cell.isOpen || cell.isMarked) {
         return state; // already open or marked
       }
 
-      if (state.rows[action.rowIndex][action.cellIndex].isMine) {
+      if (cell.isMine) {
         // game over
         return {
           rows: state.rows.map(row =>
@@ -67,10 +57,7 @@ export function game(
 
       const rows = state.rows.slice(); // copy main array
 
-      if (
-        !rows[action.rowIndex][action.cellIndex].isOpen &&
-        rows[action.rowIndex][action.cellIndex].neighbourMines === 0
-      ) {
+      if (!cell.isOpen && cell.neighbourMines === 0) {
         // user clicked on free cell - open free cells recursevly
         const { opened } = openCellsRecursively(
           rows,
@@ -79,8 +66,9 @@ export function game(
         );
 
         if (
+          minesMarked === state.mines &&
           cellsOpened + opened + minesMarked ===
-          state.rows.length * state.rows[0].length
+            state.rows.length * state.rows[0].length
         ) {
           // victory
           console.log("!!!!!!!!!!!!!victoria!!!!!!!!!!!!!!!!!!");
@@ -99,15 +87,15 @@ export function game(
       rows[action.rowIndex] = rows[action.rowIndex].slice();
 
       rows[action.rowIndex][action.cellIndex] = {
-        ...rows[action.rowIndex][action.cellIndex],
+        ...cell,
         isOpen: true
       };
 
       cellsOpened++; // one cell is opened
 
       if (
-        cellsOpened + minesMarked ===
-        state.rows.length * state.rows[0].length
+        minesMarked === state.mines &&
+        cellsOpened + minesMarked === state.rows.length * state.rows[0].length
       ) {
         // victory
         console.log("!!!!!!!!!!!!!victoria!!!!!!!!!!!!!!!!!!");
@@ -123,30 +111,31 @@ export function game(
       };
     }
 
-    case "rightClick":
+    case "rightClick": {
       if (state.gameState !== "game" && state.gameState !== "new") {
         return state;
       }
 
-      if (state.rows[action.rowIndex][action.cellIndex].isOpen) {
+      const cell = state.rows[action.rowIndex][action.cellIndex];
+
+      if (cell.isOpen) {
         return state; // already opened and cannot be marked
       }
 
       const rows = state.rows.slice();
 
-      const minesMarked =
-        state.minesMarked +
-        (rows[action.rowIndex][action.cellIndex].isMarked ? -1 : 1);
+      const minesMarked = state.minesMarked + (cell.isMarked ? -1 : 1);
       rows[action.rowIndex][action.cellIndex] = {
-        ...rows[action.rowIndex][action.cellIndex],
-        isMarked: !rows[action.rowIndex][action.cellIndex].isMarked
+        ...cell,
+        isMarked: !cell.isMarked
       };
 
       let gameState: GameState = "game";
 
       if (
+        minesMarked === state.mines &&
         state.cellsOpened + minesMarked ===
-        state.rows.length * state.rows[0].length
+          state.rows.length * state.rows[0].length
       ) {
         // victory
         console.log("!!!!!!!!!!!!!victoria!!!!!!!!!!!!!!!!!!");
@@ -160,6 +149,50 @@ export function game(
         gameState: gameState,
         mines: state.mines
       };
+    }
+
+    case "doubleClick": {
+      if (state.gameState !== "game") {
+        return state;
+      }
+
+      const cell = state.rows[action.rowIndex][action.cellIndex];
+      if (!cell.isOpen || cell.isMarked || cell.neighbourMines === 0) {
+        return state;
+      }
+      const rows = state.rows.slice(); // copy main array
+      const { opened } = handleDoubleClickRecursively(
+        rows,
+        action.rowIndex,
+        action.cellIndex
+      );
+
+      if (opened === 0) {
+        return state;
+      }
+
+      console.log("opened", opened);
+
+      let gameState: GameState = "game";
+
+      if (
+        state.minesMarked === state.mines &&
+        state.cellsOpened + opened + state.minesMarked ===
+          state.rows.length * state.rows[0].length
+      ) {
+        // victory
+        console.log("!!!!!!!!!!!!!victoria!!!!!!!!!!!!!!!!!! 111");
+        gameState = "win";
+      }
+
+      return {
+        rows,
+        minesMarked: state.minesMarked,
+        cellsOpened: state.cellsOpened + opened,
+        gameState: gameState,
+        mines: state.mines
+      };
+    }
 
     case "reset":
       return getInitialState(action.rows, action.columns, action.mines);

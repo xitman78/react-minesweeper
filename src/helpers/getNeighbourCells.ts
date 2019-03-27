@@ -1,6 +1,6 @@
 import { CellValue } from "../store/types";
 
-interface GetNeighbourCellsResposeItem {
+export interface GetNeighbourCellsResposeItem {
   cell: CellValue;
   rowIndex: number;
   cellIndex: number;
