@@ -2,13 +2,10 @@ import * as React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { CellValue, GridState } from "../store/types";
-import { cellClick, cellRightClick } from "../store/action";
 
 export interface CellProps extends CellValue {
   rowIndex: number;
   colIndex: number;
-  cellClick: typeof cellClick;
-  cellRightClick: typeof cellRightClick;
 }
 
 const CellContent = styled.div`
@@ -45,10 +42,11 @@ const CellWrapper = styled("div")<{ isMine: boolean; isOpen: boolean }>`
 const Cell: React.SFC<CellProps> = props => {
   return (
     <CellWrapper
-      onClick={() => props.cellClick(props.rowIndex, props.colIndex)}
-      onContextMenu={() => props.cellRightClick(props.rowIndex, props.colIndex)}
       isMine={props.isMine}
       isOpen={props.isOpen}
+      data-type="cell"
+      data-row={props.rowIndex}
+      data-col={props.colIndex}
     >
       {props.isOpen ? (
         <>
@@ -73,8 +71,5 @@ const mapStateToProps = (
 
 export default connect(
   mapStateToProps,
-  {
-    cellClick,
-    cellRightClick
-  }
+  null
 )(Cell);

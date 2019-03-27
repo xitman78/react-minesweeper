@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import ClearButton from "./ClearButton";
 import { GridState } from "../store/types";
 import Timer from "./Timer";
+import { cellClick, cellRightClick } from "../store/action";
 
 const GridContainer = styled.div`
   margin-top: 20px;
@@ -19,14 +20,33 @@ const GridContainer = styled.div`
 
 export interface GridProps {
   rowsCount: number;
+  cellClick: typeof cellClick;
+  cellRightClick: typeof cellRightClick;
 }
 
 const Grid: React.SFC<GridProps> = props => {
   return (
     <GridContainer
+      onClick={event => {
+        // @ts-ignore
+        let dataset = event.target.dataset as any;
+        if (dataset && dataset.type === "cell") {
+          event.preventDefault();
+          event.stopPropagation();
+          props.cellClick(parseInt(dataset.row, 10), parseInt(dataset.col, 10));
+        }
+      }}
       onContextMenu={event => {
-        event.preventDefault();
-        event.stopPropagation();
+        // @ts-ignore
+        let dataset = event.target.dataset as any;
+        if (dataset && dataset.type === "cell") {
+          event.preventDefault();
+          event.stopPropagation();
+          props.cellRightClick(
+            parseInt(dataset.row, 10),
+            parseInt(dataset.col, 10)
+          );
+        }
       }}
     >
       <Timer />
@@ -44,5 +64,8 @@ const mapStateToProps = (state: GridState) => ({
 
 export default connect(
   mapStateToProps,
-  null
+  {
+    cellClick,
+    cellRightClick
+  }
 )(Grid);
