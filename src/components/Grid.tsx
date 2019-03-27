@@ -24,30 +24,34 @@ export interface GridProps {
   cellRightClick: typeof cellRightClick;
 }
 
+function clickHandler(
+  event: React.MouseEvent,
+  handler: typeof cellClick | typeof cellRightClick
+) {
+  if (event.target instanceof HTMLDivElement) {
+    let dataset = event.target.dataset;
+    if (dataset && dataset.type === "cell") {
+      if (!dataset.row || !dataset.col) {
+        return;
+      }
+      const rowIndex = parseInt(dataset.row, 10);
+      const cellIndex = parseInt(dataset.col, 10);
+      if (isNaN(rowIndex) || isNaN(cellIndex)) {
+        console.error("invalid cell index");
+        return;
+      }
+      event.preventDefault();
+      event.stopPropagation();
+      handler(rowIndex, cellIndex);
+    }
+  }
+}
+
 const Grid: React.SFC<GridProps> = props => {
   return (
     <GridContainer
-      onClick={event => {
-        // @ts-ignore
-        let dataset = event.target.dataset as any;
-        if (dataset && dataset.type === "cell") {
-          event.preventDefault();
-          event.stopPropagation();
-          props.cellClick(parseInt(dataset.row, 10), parseInt(dataset.col, 10));
-        }
-      }}
-      onContextMenu={event => {
-        // @ts-ignore
-        let dataset = event.target.dataset as any;
-        if (dataset && dataset.type === "cell") {
-          event.preventDefault();
-          event.stopPropagation();
-          props.cellRightClick(
-            parseInt(dataset.row, 10),
-            parseInt(dataset.col, 10)
-          );
-        }
-      }}
+      onClick={event => clickHandler(event, props.cellClick)}
+      onContextMenu={event => clickHandler(event, props.cellRightClick)}
     >
       <Timer />
       {new Array(props.rowsCount).fill(0).map((_, rowIndex) => (

@@ -40,23 +40,22 @@ const CellWrapper = styled("div")<{ isMine: boolean; isOpen: boolean }>`
 `;
 
 const Cell: React.SFC<CellProps> = props => {
+  const dataSet = {
+    "data-type": "cell",
+    "data-row": props.rowIndex,
+    "data-col": props.colIndex
+  };
   return (
-    <CellWrapper
-      isMine={props.isMine}
-      isOpen={props.isOpen}
-      data-type="cell"
-      data-row={props.rowIndex}
-      data-col={props.colIndex}
-    >
+    <CellWrapper isMine={props.isMine} isOpen={props.isOpen} {...dataSet}>
       {props.isOpen ? (
         <>
           {props.neighbourMines ? (
-            <CellContent>{props.neighbourMines}</CellContent>
+            <CellContent {...dataSet}>{props.neighbourMines}</CellContent>
           ) : null}
-          {props.isMine ? <CellContent>💣</CellContent> : null}
+          {props.isMine ? <CellContent {...dataSet}>💣</CellContent> : null}
         </>
       ) : (
-        props.isMarked && <CellContent>⚑</CellContent>
+        props.isMarked && <CellContent {...dataSet}>⚑</CellContent>
       )}
     </CellWrapper>
   );
