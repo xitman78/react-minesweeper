@@ -1,5 +1,5 @@
 import { GridState, CellValue } from "../store/types";
-import { getNeighbourCells } from "./getNeighbourCells";
+import { getNeighborCells } from "./getNeighborCells";
 
 export function getInitialState(
   rows: number,
@@ -24,7 +24,7 @@ export function getInitialState(
         isMine: false,
         isOpen: false,
         isMarked: false,
-        neighbourMines: 0
+        neighborMines: 0
       })
       .map(cell => ({
         ...cell,
@@ -35,11 +35,11 @@ export function getInitialState(
   for (let ri = 0; ri < rows; ri++) {
     for (let ci = 0; ci < cols; ci++) {
       if (allRows[ri][ci].isMine) {
-        const neighbourCells = getNeighbourCells(allRows, ri, ci).filter(
+        const neighborCells = getNeighborCells(allRows, ri, ci).filter(
           cell => !cell.cell.isMine
         );
-        neighbourCells.forEach(cell => {
-          cell.cell.neighbourMines++;
+        neighborCells.forEach(cell => {
+          cell.cell.neighborMines++;
         });
       }
     }

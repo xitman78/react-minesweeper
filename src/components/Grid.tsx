@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import ClearButton from "./ClearButton";
 import { GridState } from "../store/types";
 import Timer from "./Timer";
-import { cellClick, cellRightClick } from "../store/action";
+import { cellClick, cellRightClick, doubleClick } from "../store/action";
 
 const GridContainer = styled.div`
   margin-top: 20px;
@@ -22,11 +22,12 @@ export interface GridProps {
   rowsCount: number;
   cellClick: typeof cellClick;
   cellRightClick: typeof cellRightClick;
+  doubleClick: typeof doubleClick;
 }
 
 function clickHandler(
   event: React.MouseEvent,
-  handler: typeof cellClick | typeof cellRightClick
+  handler: typeof cellClick | typeof cellRightClick | typeof doubleClick
 ) {
   if (event.target instanceof HTMLDivElement) {
     let dataset = event.target.dataset;
@@ -52,9 +53,7 @@ const Grid: React.SFC<GridProps> = props => {
     <GridContainer
       onClick={event => clickHandler(event, props.cellClick)}
       onContextMenu={event => clickHandler(event, props.cellRightClick)}
-      onDoubleClick={event => {
-        console.log("onDoubleClick");
-      }}
+      onDoubleClick={event => clickHandler(event, props.doubleClick)}
     >
       <Timer />
       {new Array(props.rowsCount).fill(0).map((_, rowIndex) => (
@@ -73,6 +72,7 @@ export default connect(
   mapStateToProps,
   {
     cellClick,
-    cellRightClick
+    cellRightClick,
+    doubleClick
   }
 )(Grid);

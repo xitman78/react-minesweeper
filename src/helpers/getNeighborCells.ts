@@ -1,19 +1,19 @@
 import { CellValue } from "../store/types";
 
-interface GetNeighbourCellsResposeItem {
+export interface GetNeighborCellsResponseItem {
   cell: CellValue;
   rowIndex: number;
   cellIndex: number;
 }
 
-export function getNeighbourCells(
+export function getNeighborCells(
   rows: Array<CellValue[]>,
   rowIndex: number,
   cellIndex: number
-): Array<GetNeighbourCellsResposeItem> {
+): Array<GetNeighborCellsResponseItem> {
   const startCellIndex = Math.max(cellIndex - 1, 0);
   const endCellIndex = startCellIndex + (cellIndex === 0 ? 2 : 3);
-  const topNeighbours: GetNeighbourCellsResposeItem[] =
+  const topNeighbors: GetNeighborCellsResponseItem[] =
     rowIndex === 0
       ? []
       : rows[rowIndex - 1]
@@ -24,7 +24,7 @@ export function getNeighbourCells(
             cellIndex: startCellIndex + i
           }));
 
-  const leftCell: GetNeighbourCellsResposeItem[] =
+  const leftCell: GetNeighborCellsResponseItem[] =
     cellIndex === 0
       ? []
       : [
@@ -35,7 +35,7 @@ export function getNeighbourCells(
           }
         ];
 
-  const rightCell: GetNeighbourCellsResposeItem[] =
+  const rightCell: GetNeighborCellsResponseItem[] =
     cellIndex === rows[0].length - 1
       ? []
       : [
@@ -46,7 +46,7 @@ export function getNeighbourCells(
           }
         ];
 
-  const bottomNeighbours: GetNeighbourCellsResposeItem[] =
+  const bottomNeighbors: GetNeighborCellsResponseItem[] =
     rowIndex === rows.length - 1
       ? []
       : rows[rowIndex + 1]
@@ -57,5 +57,5 @@ export function getNeighbourCells(
             cellIndex: startCellIndex + i
           }));
 
-  return topNeighbours.concat(leftCell, rightCell, bottomNeighbours);
+  return topNeighbors.concat(leftCell, rightCell, bottomNeighbors);
 }

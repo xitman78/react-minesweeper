@@ -1,4 +1,10 @@
-import { NewGame, ResetGame, ClickAction, RightClickAction } from "./reducer";
+import {
+  ClickAction,
+  DoubleClickAction,
+  NewGame,
+  ResetGame,
+  RightClickAction
+} from "./actionTypes";
 
 export function newGame(): NewGame {
   return {
@@ -33,6 +39,17 @@ export function cellRightClick(
 ): RightClickAction {
   return {
     type: "rightClick",
+    rowIndex,
+    cellIndex
+  };
+}
+
+export function doubleClick(
+  rowIndex: number,
+  cellIndex: number
+): DoubleClickAction {
+  return {
+    type: "doubleClick",
     rowIndex,
     cellIndex
   };

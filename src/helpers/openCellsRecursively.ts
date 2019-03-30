@@ -1,5 +1,5 @@
 import { CellValue } from "../store/types";
-import { getNeighbourCells } from "./getNeighbourCells";
+import { getNeighborCells } from "./getNeighborCells";
 
 interface OpenCellsRecursivelyResponse {
   opened: number;
@@ -21,20 +21,20 @@ export function openCellsRecursively(
     ...allRows[rowIndex][cellIndex],
     isOpen: true
   };
-  if (allRows[rowIndex][cellIndex].neighbourMines > 0) {
-    // there are neighbour mines - open only one cell
+  if (allRows[rowIndex][cellIndex].neighborMines > 0) {
+    // there are neighbor mines - open only one cell
     return {
       opened: 1
     };
   }
-  // else get all neighbour cells and call this function recursively
+  // else get all neighbor cells and call this function recursively
   let cellsOpened = 1;
 
-  const neighbourCells = getNeighbourCells(allRows, rowIndex, cellIndex).filter(
+  const neighborCells = getNeighborCells(allRows, rowIndex, cellIndex).filter(
     cell => !cell.cell.isMine && !cell.cell.isMarked
   );
 
-  for (let cell of neighbourCells) {
+  for (let cell of neighborCells) {
     const { opened } = openCellsRecursively(
       allRows,
       cell.rowIndex,
