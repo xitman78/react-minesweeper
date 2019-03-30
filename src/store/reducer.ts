@@ -1,6 +1,6 @@
 import { getInitialState } from "../helpers/getInitialState";
 import { GridState, GameState } from "./types";
-import { openCellsRecursively } from "../helpers/openCellsRecursevly";
+import { openCellsRecursively } from "../helpers/openCellsRecursively";
 import {
   ClickAction,
   DoubleClickAction,
@@ -8,8 +8,7 @@ import {
   ResetGame,
   NewGame
 } from "./actionTypes";
-// import { getNeighbourCells } from "../helpers/getNeighbourCells";
-import { handleDoubleClickRecursively } from "../helpers/handleDoubleClickRecursevly";
+import { handleDoubleClickRecursively } from "../helpers/handleDoubleClickRecursively";
 
 type ActionType =
   | ClickAction
@@ -57,7 +56,7 @@ export function game(
 
       const rows = state.rows.slice(); // copy main array
 
-      if (!cell.isOpen && cell.neighbourMines === 0) {
+      if (!cell.isOpen && cell.neighborMines === 0) {
         // user clicked on free cell - open free cells recursevly
         const { opened } = openCellsRecursively(
           rows,
@@ -157,7 +156,7 @@ export function game(
       }
 
       const cell = state.rows[action.rowIndex][action.cellIndex];
-      if (!cell.isOpen || cell.isMarked || cell.neighbourMines === 0) {
+      if (!cell.isOpen || cell.isMarked || cell.neighborMines === 0) {
         return state;
       }
       const rows = state.rows.slice(); // copy main array
@@ -170,8 +169,6 @@ export function game(
       if (opened === 0) {
         return state;
       }
-
-      console.log("opened", opened);
 
       let gameState: GameState = "game";
 

@@ -4,7 +4,7 @@ export interface CellValue {
   isMine: boolean;
   isOpen: boolean;
   isMarked: boolean;
-  neighbourMines: number;
+  neighborMines: number;
 }
 
 export interface GridState {

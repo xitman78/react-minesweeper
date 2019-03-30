@@ -1,9 +1,9 @@
 import { CellValue } from "../store/types";
 import {
-  getNeighbourCells,
-  GetNeighbourCellsResposeItem
-} from "./getNeighbourCells";
-import { openCellsRecursively } from "./openCellsRecursevly";
+  getNeighborCells,
+  GetNeighborCellsResponseItem
+} from "./getNeighborCells";
+import { openCellsRecursively } from "./openCellsRecursively";
 
 interface HandleDoubleClickRecursivelyResponse {
   opened: number;
@@ -18,23 +18,26 @@ export function handleDoubleClickRecursively(
   if (!cell.isOpen) {
     return { opened: 0 };
   }
-  const neighbourCells = getNeighbourCells(allRows, rowIndex, cellIndex);
-  const minesMarked = neighbourCells.filter(cell => cell.cell.isMarked).length;
-  if (minesMarked !== cell.neighbourMines) {
+  const neighborCells = getNeighborCells(allRows, rowIndex, cellIndex);
+  const minesMarked = neighborCells.filter(cell => cell.cell.isMarked).length;
+  if (minesMarked !== cell.neighborMines) {
     return { opened: 0 };
   }
-  const notOpenedCells = neighbourCells.filter(
+  const notOpenedCells = neighborCells.filter(
     cell => !cell.cell.isOpen && !cell.cell.isMarked && !cell.cell.isMine
   );
 
   let totalOpened = 0;
 
-  console.log("notOpenedCells", notOpenedCells);
-
-  const nextCycleCells: Array<GetNeighbourCellsResposeItem> = [];
+  const nextCycleCells: Array<GetNeighborCellsResponseItem> = [];
 
   for (const sealedCell of notOpenedCells) {
-    if (sealedCell.cell.neighbourMines === 0) {
+    // this is needed if this cell was already opened by another cell
+    if (allRows[sealedCell.rowIndex][sealedCell.cellIndex].isOpen) {
+      continue; // already opened
+    }
+
+    if (sealedCell.cell.neighborMines === 0) {
       const { opened } = openCellsRecursively(
         allRows,
         sealedCell.rowIndex,

@@ -49,8 +49,8 @@ const Cell: React.SFC<CellProps> = props => {
     <CellWrapper isMine={props.isMine} isOpen={props.isOpen} {...dataSet}>
       {props.isOpen ? (
         <>
-          {props.neighbourMines ? (
-            <CellContent {...dataSet}>{props.neighbourMines}</CellContent>
+          {props.neighborMines ? (
+            <CellContent {...dataSet}>{props.neighborMines}</CellContent>
           ) : null}
           {props.isMine ? <CellContent {...dataSet}>💣</CellContent> : null}
         </>

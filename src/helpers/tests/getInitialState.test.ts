@@ -1,5 +1,5 @@
 import { getInitialState } from "../getInitialState";
-import { getNeighbourCells } from "../getNeighbourCells";
+import { getneighborCells } from "../getNeighborCells";
 
 it("Should create state with correct dimentions", () => {
   const state = getInitialState(10, 10, 10);
@@ -29,12 +29,10 @@ it("Should calculate correctly number of neightbour mines", () => {
   for (let ri = 0; ri < 10; ri++) {
     for (let ci = 0; ci < 10; ci++) {
       if (state.rows[ri][ci].isMine === false) {
-        const neighbourMineCells = getNeighbourCells(state.rows, ri, ci).filter(
+        const neighborMineCells = getneighborCells(state.rows, ri, ci).filter(
           cell => cell.cell.isMine
         );
-        expect(state.rows[ri][ci].neighbourMines).toBe(
-          neighbourMineCells.length
-        );
+        expect(state.rows[ri][ci].neighborMines).toBe(neighborMineCells.length);
       }
     }
   }
