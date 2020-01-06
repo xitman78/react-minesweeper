@@ -19,6 +19,7 @@ const Row: React.SFC<RowProps> = ({ rowLength, rowIndex }) => {
   return (
     <RowWrapper>
       {cells.map(cellIndex => (
+        // @ts-ignore
         <Cell key={cellIndex} rowIndex={rowIndex} colIndex={cellIndex} />
       ))}
     </RowWrapper>
