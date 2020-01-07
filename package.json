@@ -2,6 +2,7 @@
   "name": "react-minesweeper",
   "version": "1.0.0",
   "private": true,
+  "homepage": "https://xitman78.github.io/react-minesweeper/",
   "dependencies": {
     "@types/react": "^16.8.8",
     "@types/react-dom": "^16.8.2",
