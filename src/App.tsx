@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 import { Route, Switch, Link, HashRouter } from "react-router-dom";
 import Game from "./containers/Game";
-import About from "./containers/About";
+import Rules from "./containers/Rules";
 
 const Menu = styled.div`
   display: flex;
@@ -24,11 +24,11 @@ class App extends React.Component<AppRouterProps> {
           <>
             <Menu>
               <Nav to="/">Game</Nav>
-              <Nav to="/about">About</Nav>
+              <Nav to="/about">Rules</Nav>
             </Menu>
             <Switch>
               <Route exact path="/" component={Game} />
-              <Route exact path="/about" component={About} />
+              <Route exact path="/about" component={Rules} />
             </Switch>
           </>
         </HashRouter>
