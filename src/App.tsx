@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import { Route, Switch, Link } from "react-router-dom";
+import { Route, Switch, Link, HashRouter } from "react-router-dom";
 import Game from "./containers/Game";
 import About from "./containers/About";
 
@@ -20,14 +20,18 @@ class App extends React.Component<AppRouterProps> {
   render() {
     return (
       <div>
-        <Menu>
-          <Nav to="/">Game</Nav>
-          <Nav to="/about">About</Nav>
-        </Menu>
-        <Switch>
-          <Route exact path="/" component={Game} />
-          <Route exact path="/about" component={About} />
-        </Switch>
+        <HashRouter>
+          <>
+            <Menu>
+              <Nav to="/">Game</Nav>
+              <Nav to="/about">About</Nav>
+            </Menu>
+            <Switch>
+              <Route exact path="/" component={Game} />
+              <Route exact path="/about" component={About} />
+            </Switch>
+          </>
+        </HashRouter>
       </div>
     );
   }
