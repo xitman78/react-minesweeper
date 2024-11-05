@@ -25,7 +25,7 @@ export interface ClearButtonProps {
   newGame: typeof newGame;
 }
 
-const ClearButton: React.SFC<ClearButtonProps> = ({ gameState, newGame }) => {
+const ClearButton: React.FC<ClearButtonProps> = ({ gameState, newGame }) => {
   return (
     <ClearButtonContainer onClick={newGame}>
       {(gameState === "game" || gameState === "new") && "New"}

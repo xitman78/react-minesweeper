@@ -59,7 +59,7 @@ class Timer extends React.Component<TimerProps, TimerState> {
 
   componentDidUpdate(prevProps: TimerProps, prevState: TimerState) {
     if (!prevState.isTimerStarted && this.state.isTimerStarted) {
-      this.interval = setInterval(this.handleInterval, 100);
+      this.interval = window.setInterval(this.handleInterval, 100);
     } else if (
       prevState.isTimerStarted &&
       !this.state.isTimerStarted &&

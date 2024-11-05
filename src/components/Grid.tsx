@@ -1,5 +1,5 @@
 import * as React from "react";
-import Row from "./Row";
+import { Row } from "./Row";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import ClearButton from "./ClearButton";
@@ -49,7 +49,7 @@ function clickHandler(
   }
 }
 
-const Grid: React.SFC<GridProps> = props => {
+const Grid: React.FC<GridProps> = props => {
   return (
     <GridContainer
       onClick={event => clickHandler(event, props.cellClick)}

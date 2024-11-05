@@ -1,25 +1,19 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "target": "es2017",                      // Updated to a more modern version
+    "lib": ["dom", "dom.iterable", "esnext"], 
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "esnext",
+    "module": "esnext",                       // Keep this for modern bundling
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "preserve"
+    "jsx": "react-jsx"                        // Enable the React 17+ JSX Transform
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }

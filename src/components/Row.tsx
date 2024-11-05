@@ -1,8 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import { connect } from "react-redux";
 import Cell from "./Cell";
-import { GridState } from "../store/types";
 
 const RowWrapper = styled.div`
   display: flex;
@@ -14,7 +12,7 @@ export interface RowProps {
   rowIndex: number;
 }
 
-const Row: React.SFC<RowProps> = ({ rowLength, rowIndex }) => {
+export const Row: React.FC<RowProps> = ({ rowLength, rowIndex }) => {
   const cells: number[] = new Array(rowLength).fill(1).map((_, i) => i);
   return (
     <RowWrapper>
@@ -26,11 +24,12 @@ const Row: React.SFC<RowProps> = ({ rowLength, rowIndex }) => {
   );
 };
 
-const mapStateToProps = (state: GridState) => ({
-  rowLength: state.rows[0].length
-});
 
-export default connect(
-  mapStateToProps,
-  null
-)(Row);
+// const mapStateToProps = (state: GridState) => ({
+//   rowLength: state.rows[0].length
+// });
+
+// export default connect(
+//   mapStateToProps,
+//   null
+// )(Row);

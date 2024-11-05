@@ -39,7 +39,7 @@ const CellWrapper = styled("div")<{ isMine: boolean; isOpen: boolean }>`
   transition: background-color 0.3s ease-out;
 `;
 
-const Cell: React.SFC<CellProps> = props => {
+const Cell: React.FC<CellProps> = props => {
   const dataSet = {
     "data-type": "cell",
     "data-row": props.rowIndex,

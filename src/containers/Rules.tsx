@@ -15,7 +15,7 @@ export interface RulesProps {
 
 }
 
-const Rules: React.SFC<RulesProps> = () => {
+const Rules: React.FC<RulesProps> = () => {
   return (
     <PageContainer>
       <RulesContainer>
